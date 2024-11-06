@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap');
+
+/* =======================================================
+ *   Author: Saksham Shekher
+ *   Only For Educational Purpose
+ * ======================================================= */
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #616370;
+  background: #26272c;
+  height: 100%;
+  position: relative;
+  margin: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Contenedor principal */
+.container {
+  background-color: #33363e;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Título */
+h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  animation: fadeIn 1s ease;
+}
+
+/* Formulario y Textarea */
+form label {
+  font-size: 1rem;
+  color: #ff5f5f;
+  animation: fadeIn 0.8s ease;
+}
+form textarea {
+  background-color: #2b2d35;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 0.8rem;
+  border-radius: 5px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+form textarea:focus {
+  border-color: #61dafb;
+  box-shadow: 0 0 10px rgba(97, 218, 251, 0.5);
+}
+
+/* Botones */
+button {
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+  transform: scale(1.05);
+}
+button:active {
+  transform: scale(0.98);
+}
+.btn-outline-success {
+  color: #61dafb;
+  border-color: #61dafb;
+}
+.btn-outline-success:hover {
+  background-color: #61dafb;
+  color: #fff;
+}
+.btn-outline-danger {
+  color: #ff5f5f;
+  border-color: #ff5f5f;
+}
+.btn-outline-danger:hover {
+  background-color: #ff5f5f;
+  color: #fff;
+}
+
+/* Animaciones para mensajes de estado */
+.success, .danger, .warning {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInSlideUp 0.6s ease forwards;
+}
+
+/* Transiciones para cambios en los contadores */
+.live, .die, .unknown {
+  font-size: 1.2rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.live:hover, .die:hover, .unknown:hover {
+  transform: scale(1.1);
+  background-color: #444;
+}
+
+/* Fade-in y Slide-up Animation */
+@keyframes fadeInSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Estilos de mensajes */
+.alert {
+  font-size: 1rem;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.alert-success {
+  background-color: #28a745;
+  color: #fff;
+}
+.alert-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.alert-warning {
+  background-color: #ffc107;
+  color: #333;
+}
+.alert:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
