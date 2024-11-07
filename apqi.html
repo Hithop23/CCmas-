@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Interactivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .message {
+            margin-top: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Formulario de Verificación</h1>
+
+    <form id="verificationForm">
+        <label for="data">Introduce datos:</label><br>
+        <input type="text" id="data" name="data" required><br><br>
+
+        <label for="ban">Introduce el número de ban:</label><br>
+        <input type="number" id="ban" name="ban" required><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <script>
+        document.getElementById('verificationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+            // Obtener los valores de los campos
+            var data = document.getElementById('data').value;
+            var ban = document.getElementById('ban').value;
+            var messageElement = document.getElementById('message');
+            var errorMessage = "";
+            var successMessage = "";
+            
+            // Simulando los valores iniciales y el flujo que habría en PHP
+            let _SESSION = {  // Este es un emulador de lo que sería una sesión en PHP
+                'data': '',
+                'ban': '',
+                'id': '123456789'
+            };
+
+            // Asignar valores a la sesión
+            _SESSION.data = data;
+            _SESSION.ban = ban;
+
+            // Verificar los valores introducidos
+            if (_SESSION.data && _SESSION.ban) {
+                // Lógica de verificación (similitud con lo que podrías tener en PHP)
+                if (_SESSION.data.length > 5 && parseInt(_SESSION.ban) > 0) {
+                    // Si los valores son válidos
+                    successMessage = "<div class='success'>¡Verificación exitosa! Los datos son correctos.</div>";
+                } else {
+                    // Si hay algún error en la verificación
+                    errorMessage = "<div class='error'>Error: Los datos no son válidos. Por favor, revisa la información ingresada.</div>";
+                }
+            } else {
+                // Si algún campo está vacío
+                errorMessage = "<div class='error'>Por favor, completa todos los campos.</div>";
+            }
+
+            // Mostrar el mensaje correspondiente
+            if (successMessage) {
+                messageElement.innerHTML = successMessage;
+            } else if (errorMessage) {
+                messageElement.innerHTML = errorMessage;
+            }
+        });
+    </script>
+
+</body>
+</html>
