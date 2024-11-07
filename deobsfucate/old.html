@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación de Tarjetas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .panel {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .danger { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #cce5ff; color: #004085; }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Validación de Tarjetas</h1>
+
+    <textarea id="cc" rows="5" cols="40" placeholder="Ingresa cada tarjeta en una línea en formato: 1234567890123456|MM|AAAA|CVV"></textarea><br><br>
+    <button name="valid">Validar</button>
+
+    <div class="panel success">Live Count: <span class="live">0</span></div>
+    <div class="panel danger">Die Count: <span class="die">0</span></div>
+    <div class="panel info"></div>
+
+    <script>
+        const $validButton = document.querySelector("button[name='valid']");
+        const $ccInput = document.getElementById("cc");
+        const $liveCount = document.querySelector(".live");
+        const $dieCount = document.querySelector(".die");
+        const $successPanel = document.querySelector(".success");
+        const $dangerPanel = document.querySelector(".danger");
+        const $infoPanel = document.querySelector(".info");
+
+        // Validación del Algoritmo de Luhn
+        function isValidLuhn(number) {
+            let sum = 0;
+            let shouldDouble = false;
+
+            for (let i = number.length - 1; i >= 0; i--) {
+                let digit = parseInt(number.charAt(i));
+
+                if (shouldDouble) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+            return sum % 10 === 0;
+        }
+
+        function validateCard(cardData) {
+            const [num, expm, expy, cvv] = cardData.split("|");
+
+            // Validación del número de tarjeta usando Luhn
+            if (!isValidLuhn(num)) {
+                return { valid: false, message: `Tarjeta inválida: ${num} no pasa el Algoritmo de Luhn.` };
+            }
+
+            // Validación de la fecha de expiración
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth() + 1;
+            const expYear = parseInt(expy);
+            const expMonth = parseInt(expm);
+
+            if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                return { valid: false, message: `Tarjeta expirada: ${num} expiró en ${expm}/${expy}.` };
+            }
+
+            // Validación del CVV
+            if (!/^\d{3}$/.test(cvv)) {
+                return { valid: false, message: `CVV inválido: ${cvv} en la tarjeta ${num}.` };
+            }
+
+            return { valid: true, message: `Tarjeta válida: ${num} expira en ${expm}/${expy}.` };
+        }
+
+        function processAllCards(cardList) {
+            let liveCount = 0;
+            let dieCount = 0;
+            $successPanel.innerHTML = "Resultados:<br>";
+            $dangerPanel.innerHTML = "";
+
+            cardList.forEach(cardData => {
+                const result = validateCard(cardData.trim());
+                if (result.valid) {
+                    liveCount++;
+                    $successPanel.innerHTML += `<div><b style="color:#008000;">Live</b> | ${result.message}</div>`;
+                } else {
+                    dieCount++;
+                    $dangerPanel.innerHTML += `<div><b style="color:#FF0000;">Die</b> | ${result.message}</div>`;
+                }
+            });
+
+            $liveCount.textContent = liveCount;
+            $dieCount.textContent = dieCount;
+        }
+
+        $validButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            const cardList = $ccInput.value.split("\n").filter(line => line.trim() !== "");
+
+            if (cardList.length === 0) {
+                $infoPanel.innerHTML = "<b>Error: No hay tarjetas ingresadas.</b>";
+                return;
+            }
+
+            processAllCards(cardList);
+        });
+    </script>
+
+</body>
+</html>
