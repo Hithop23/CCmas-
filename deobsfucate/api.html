@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Tarjeta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .live { color: #008000; }
+        .die { color: #FF0000; }
+        .unknown { color: #800080; }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Verificación de Tarjeta</h1>
+
+    <form id="cardForm">
+        <label for="data">Introduce los datos de la tarjeta (Formato: 16 dígitos|MM|AAAA|CVV):</label><br>
+        <input type="text" id="data" name="data" required placeholder="1234567890123456|12|2023|123"><br><br>
+        <button type="submit">Verificar</button>
+    </form>
+
+    <div id="result" class="message"></div>
+
+    <script>
+        document.getElementById('cardForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar recargar la página
+            
+            const data = document.getElementById('data').value;
+            const resultDiv = document.getElementById('result');
+
+            // Validar formato de datos usando una expresión regular
+            const regex = /^[\d]{16}\|[\d]{2}\|[\d]{4}\|[\d]{3}$/;
+            if (regex.test(data)) {
+                // Separar los datos
+                const [num, expm, expy, cvv] = data.split("|");
+
+                // Crear el formato de salida
+                const format = `${num}|${expm}|${expy}|${cvv}`;
+                
+                // Validar fecha de expiración
+                const currentYear = new Date().getFullYear();
+                const currentMonth = new Date().getMonth() + 1; // Enero es 0
+                
+                if (parseInt(expy) >= currentYear && parseInt(expm) <= 12) {
+                    // Generar resultado aleatorio (1, 2 o 3)
+                    const rand = Math.floor(Math.random() * 3) + 1;
+                    
+                    let message = "";
+                    if (rand === 1) {
+                        message = `<div class="live"><b>Live</b> | ${format} $0.5 Checked - OshekharO</div>`;
+                    } else if (rand === 2) {
+                        message = `<div class="die"><b>Die</b> | ${format} [GATE:01] @/Checked - OshekharO</div>`;
+                    } else if (rand === 3) {
+                        message = `<div class="unknown"><b>Unknown</b> | ${format} [GATE:01] @/Checked - OshekharO</div>`;
+                    }
+                    
+                    resultDiv.innerHTML = message;
+                } else {
+                    // Fecha de expiración no válida
+                    resultDiv.innerHTML = `<b>Check the validity of a credit card</b> | ${format} [GATE:01] @/Checked - OshekharO`;
+                }
+            } else {
+                // Formato de datos no válido
+                resultDiv.innerHTML = `<div class="die"><b>Error:</b> Formato de datos incorrecto. Asegúrate de seguir el formato 1234567890123456|12|2023|123</div>`;
+            }
+        });
+    </script>
+
+</body>
+</html>
